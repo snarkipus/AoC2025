@@ -13,7 +13,7 @@ This file provides guidance to agents when working with code in this repository.
 ## Code Style
 - Max line width: 60 characters (rustfmt.toml)
 - Function call width: 40 characters
-- Comment width: 50 characters
+- Comment width: 80 characters
 - Imports granularity: Crate level
 - Process functions: Use #[tracing::instrument] and return miette::Result<String>
 
