@@ -18,14 +18,12 @@ pub fn process(input: &str) -> miette::Result<String> {
             .map_err(|e| miette::miette!("Failed to parse distance '{}': {} in line '{}'", dist_str, e, line))?;
         let delta = dist % 100;
         let p = position as usize;
-        let mut dist_to_first_zero = if dir == "R" {
-            100 - p
-        } else {
-            p
+        let dist_to_first_zero = match (dir, p) {
+            ("R", _) => 100 - p,
+            ("L", 0) => 100,
+            ("L", _) => p,
+            _ => p, // Fallback for invalid direction (will be caught later)
         };
-        if dir == "L" && p == 0 {
-            dist_to_first_zero = 100;
-        }
         let num_hits = if dist < dist_to_first_zero {
             0
         } else {
