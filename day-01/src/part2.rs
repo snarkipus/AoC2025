@@ -14,7 +14,7 @@ pub fn process(input: &str) -> miette::Result<String> {
 
     for line in input.lines() {
         let (dir, dist_str) = line.split_at(1);
-        let dist: usize = dist_str.parse()
+        let dist: usize = dist_str.parse().map_err(|e| miette::miette!("Failed to parse distance '{}': {}", dist_str, e))?;
             .map_err(|e| miette::miette!("Failed to parse distance '{}': {} in line '{}'", dist_str, e, line))?;
         let delta = dist % 100;
         let p = position as usize;
