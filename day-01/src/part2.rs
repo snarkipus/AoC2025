@@ -15,18 +15,21 @@ pub fn process(input: &str) -> miette::Result<String> {
     for line in input.lines() {
         let (dir, dist_str) = line.split_at(1);
         let dist: usize = dist_str.parse()
-        let mut dist_to_first_zero = if dir == "R" {
+            .map_err(|e| miette::miette!("Failed to parse distance '{}': {} in line '{}'", dist_str, e, line))?;
+        let delta = dist % 100usize;
+        let p = position as usize;
+        let mut r = if dir == "R" {
             100 - p
         } else {
             p
         };
         if dir == "L" && p == 0 {
-            dist_to_first_zero = 100;
+            r = 100;
         }
-        let num_hits = if dist < dist_to_first_zero {
+        let num_hits = if dist < r {
             0
         } else {
-            1 + (dist - dist_to_first_zero) / 100
+            1 + (dist - r) / 100
         };
         crossings += num_hits;
         let new_pos = if dir == "L" {
