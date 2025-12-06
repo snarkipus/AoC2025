@@ -17,15 +17,15 @@ pub fn process(input: &str) -> miette::Result<String> {
         let dist: usize = dist_str.parse()
             .map_err(|e| miette::miette!("Failed to parse distance '{}': {} in line '{}'", dist_str, e, line))?;
         let dist_mod = dist % 100;
-        let new_pos: u8 = if dir == "L" {
-            ((position as usize + 100 - dist_mod) % 100) as u8
-        } else if dir == "R" {
-            ((position as usize + dist_mod) % 100) as u8
-        } else {
-            return Err(miette::miette!(
-                "Invalid direction '{}': must be L or R",
-                dir
-            ));
+        let new_pos: u8 = match dir {
+            "L" => ((position as usize + 100 - delta) % 100) as u8,
+            "R" => ((position as usize + delta) % 100) as u8,
+            _ => {
+                return Err(miette::miette!(
+                    "Invalid direction '{}': must be L or R",
+                    dir
+                ));
+            }
         };
         position = new_pos;
         if position == 0 {
