@@ -23,9 +23,6 @@ pub fn process(input: &str) -> miette::Result<String> {
         } else {
             p
         };
-        if dir == "L" && p == 0 {
-            r = 100;
-        }
         let num_hits = if dist < r {
             0
         } else {
