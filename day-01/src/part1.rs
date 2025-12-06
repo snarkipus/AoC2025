@@ -18,8 +18,13 @@ pub fn process(input: &str) -> miette::Result<String> {
             .map_err(|e| miette::miette!("Failed to parse distance '{}': {} in line '{}'", dist_str, e, line))?;
         let dist_mod = dist % 100;
         let new_pos: u8 = match dir {
-            "L" => ((position as usize + 100 - dist_mod) % 100) as u8,
-            "R" => ((position as usize + dist_mod) % 100) as u8,
+            "L" => {
+                ((position as usize + 100 - dist_mod) % 100)
+                    as u8
+            }
+            "R" => {
+                ((position as usize + dist_mod) % 100) as u8
+            }
             _ => {
                 return Err(miette::miette!(
                     "Invalid direction '{}': must be L or R",
