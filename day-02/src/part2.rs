@@ -22,40 +22,13 @@
 
 #[tracing::instrument(skip_all)]
 pub fn process(input: &str) -> miette::Result<String> {
-    let mut sum = 0u64;
     let ranges = extract_ranges(input)?;
-
-    for (start, stop) in ranges {
-        for number in start..=stop {
-            let s = number.to_string();
-            let len = s.len();
-
-            'intervals: for interval in 1..=len / 2 {
-                if len % interval != 0 {
-                    // Not a clean division
-                    continue;
-                }
-
-                let substring = &s[..interval];
-                let repeats = len / interval;
-                let mut is_match = true;
-
-                for i in 1..repeats {
-                    if &s[i * interval..(i + 1) * interval]
-                        != substring
-                    {
-                        is_match = false;
-                        break;
-                    }
-                }
-
-                if is_match {
-                    sum += number;
-                    break 'intervals;
-                }
-            }
-        }
-    }
+    let sum: u64 = ranges
+        .iter()
+        .copied()
+        .flat_map(|(start, stop)| start..=stop)
+        .filter(|&n| has_repeating_pattern(&n.to_string()))
+        .sum();
 
     Ok(sum.to_string())
 }
@@ -64,33 +37,45 @@ pub fn process(input: &str) -> miette::Result<String> {
 pub fn extract_ranges(
     input: &str,
 ) -> miette::Result<Vec<(u64, u64)>> {
-    let mut ranges = Vec::<(u64, u64)>::new();
+    input
+        .trim()
+        .split(',')
+        .map(|range_str| {
+            let range_str = range_str.trim();
+            let (start_str, stop_str) = range_str
+                .split_once('-')
+                .ok_or_else(|| {
+                    miette::miette!(
+                        "invalid range: {}",
+                        range_str
+                    )
+                })?;
+            let start: u64 =
+                start_str.parse().map_err(|e| {
+                    miette::miette!(
+                        "invalid start value: {}",
+                        e
+                    )
+                })?;
+            let stop: u64 =
+                stop_str.parse().map_err(|e| {
+                    miette::miette!(
+                        "invalid stop value: {}",
+                        e
+                    )
+                })?;
+            Ok((start, stop))
+        })
+        .collect::<Result<Vec<(u64, u64)>, _>>()
+}
 
-    for range_str in input.trim().split(',') {
-        let (start_str, stop_str) = range_str
-            .trim()
-            .split_once('-')
-            .ok_or_else(|| {
-                miette::miette!(
-                    "invalid range: {}",
-                    range_str
-                )
-            })?;
-        let start: u64 =
-            start_str.parse().map_err(|e| {
-                miette::miette!(
-                    "invalid start value: {}",
-                    e
-                )
-            })?;
-        let stop: u64 = stop_str.parse().map_err(|e| {
-            miette::miette!("invalid stop value: {}", e)
-        })?;
-
-        ranges.push((start, stop));
-    }
-
-    Ok(ranges)
+pub fn has_repeating_pattern(s: &str) -> bool {
+    (1..=s.len() / 2)
+        .filter(|&i| s.len().is_multiple_of(i))
+        .any(|i| {
+            (1..s.len() / i)
+                .all(|j| s[j * i..(j + 1) * i] == s[0..i])
+        })
 }
 
 #[cfg(test)]

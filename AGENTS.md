@@ -6,6 +6,7 @@ This file provides guidance to agents when working with code in this repository.
 - Use `just work day-XX part1` for development workflow (watches files, runs check, test, lint)
 - Use `just test day-XX part1` to run specific tests with cargo nextest
 - Use `just lint day-XX` for clippy linting
+- Use `just format day-XX` for formatting
 - Use `just run day-XX part1` to execute the production binary in release mode
 - Use `just bench day-XX part1` for benchmarking with divan
 - `just create day-XX` to generate new day from daily-template and fetch input
