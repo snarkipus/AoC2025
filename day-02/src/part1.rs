@@ -34,7 +34,7 @@ pub fn process(input: &str) -> miette::Result<String> {
         let start: u64 =
             start_str.parse().map_err(|e| {
                 miette::miette!(
-                    "Invalid start value: {}",
+                    "invalid start value: {}",
                     e
                 )
             })?;
