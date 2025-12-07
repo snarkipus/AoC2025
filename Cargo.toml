@@ -26,6 +26,9 @@ version = "0.2.13"
 features = ["trace"]
 default-features = false
 
+[workspace.dependencies.tracing-test]
+version = "0.2.5"
+
 [workspace.dependencies.tracing-subscriber]
 version = "0.3.18"
 features = [
