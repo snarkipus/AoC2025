@@ -7,6 +7,7 @@ pub fn process(_input: &str) -> miette::Result<String> {
 mod tests {
 
     #[test]
+    #[ignore = "part 2 not implemented"]
     fn test_process() -> miette::Result<()> {
         todo!("haven't built test yet");
     }
