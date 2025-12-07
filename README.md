@@ -215,7 +215,7 @@ The project uses `rustfmt` with custom settings (see `rustfmt.toml`):
 
 Format code with:
 ```bash
-cargo fmt
+just format day-XX
 ```
 
 ### Solution Structure
