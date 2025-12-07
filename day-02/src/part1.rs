@@ -1,8 +1,9 @@
-// Input: comma-separated list of ranges, each range is "start-stop"
-// Example: "11-22,95-115,998-1012"
+// Input: comma-separated list of ranges, each range is
+// "start-stop" Example: "11-22,95-115,998-1012"
 //
-// A "repeating pattern" is a number where the first half of digits equals the second half.
-// Only numbers with even digit lengths can match (e.g., 11, 1010, 123123).
+// A "repeating pattern" is a number where the first half of
+// digits equals the second half. Only numbers with even
+// digit lengths can match (e.g., 11, 1010, 123123).
 //
 // Examples:
 //     11-22:  "1|1", "2|2" -> [11, 22]
@@ -24,19 +25,29 @@ pub fn process(input: &str) -> miette::Result<String> {
         let (start_str, stop_str) = range_str
             .trim()
             .split_once('-')
-            .ok_or_else(|| miette::miette!("invalid range: {}", range_str))?;
-        let start: u64 = start_str
-            .parse()
-            .map_err(|e| miette::miette!("Invalid start value: {}", e))?;
-        let stop: u64 = stop_str
-            .parse()
-            .map_err(|e| miette::miette!("Invalid stop value: {}", e))?;
+            .ok_or_else(|| {
+                miette::miette!(
+                    "invalid range: {}",
+                    range_str
+                )
+            })?;
+        let start: u64 =
+            start_str.parse().map_err(|e| {
+                miette::miette!(
+                    "Invalid start value: {}",
+                    e
+                )
+            })?;
+        let stop: u64 = stop_str.parse().map_err(|e| {
+            miette::miette!("Invalid stop value: {}", e)
+        })?;
 
         for number in start..=stop {
             let s = number.to_string();
             let len = s.len();
 
-            // Skip odd-length numbers (can't have repeating halves)
+            // Skip odd-length numbers (can't have repeating
+            // halves)
             if len % 2 != 0 {
                 continue;
             }
@@ -52,7 +63,6 @@ pub fn process(input: &str) -> miette::Result<String> {
 
     Ok(sum.to_string())
 }
-
 
 #[cfg(test)]
 mod tests {
