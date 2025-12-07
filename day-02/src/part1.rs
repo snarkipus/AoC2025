@@ -39,7 +39,7 @@ pub fn process(input: &str) -> miette::Result<String> {
                 )
             })?;
         let stop: u64 = stop_str.parse().map_err(|e| {
-            miette::miette!("Invalid stop value: {}", e)
+            miette::miette!("invalid stop value: {}", e)
         })?;
 
         for number in start..=stop {
